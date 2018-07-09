@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @StepScope
-public class CounterCollectionWriter implements ItemWriter {
+public class CounterCollectionWriter implements ItemWriter<CounterCollection> {
 
     private Logger log = LoggerFactory.getLogger(CounterCollectionWriter.class);
 

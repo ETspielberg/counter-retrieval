@@ -1,6 +1,3 @@
-/**
- * 
- */
 package unidue.ub.counterretrieval.model.data;
 
 import javax.persistence.Column;

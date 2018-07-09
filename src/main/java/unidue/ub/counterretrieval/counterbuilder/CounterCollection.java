@@ -15,8 +15,4 @@ public class CounterCollection {
     public List<Counter> getCounters() {
         return counters;
     }
-
-    public void setCounters(List<Counter> counters) {
-        this.counters = counters;
-    }
 }

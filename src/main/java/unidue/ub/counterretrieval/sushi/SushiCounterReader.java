@@ -122,7 +122,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
         }
     }
 
-    private List<Counter> executeSushiClient(SushiClient sushiClient, int timeshift) throws JDOMException, SOAPException, IOException {
+    private List<Counter> executeSushiClient(SushiClient sushiClient, int timeshift) {
         LocalDateTime start = LocalDateTime.now().minusMonths(timeshift).withDayOfMonth(1);
         LocalDateTime end = LocalDateTime.now().minusMonths(timeshift - 1).withDayOfMonth(1).minusDays(1);
         return executeSushiClient(sushiClient, start, end);

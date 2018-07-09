@@ -154,7 +154,7 @@ public class TypeAndFormatDeterminerTasklet implements Tasklet {
                     String part = parts[i].trim();
                     if (part.contains(" "))
                         part = part.replace(" ", "-");
-                    String monthRegex = "(jan?|feb?|mar?|apr?|may?|jun?|jul?|aug?|sep?|oct?|nov?|dec?)(-| )(19|20)?\\d\\d";
+                    String monthRegex = "(jan?|feb?|mar?|apr?|may?|jun?|jul?|aug?|sep?|oct?|nov?|dec?)([- ])(19|20)?\\d\\d";
                     if (part.matches(monthRegex)){
                         String month = part.substring(0,3);
                         String yearString = part.substring(4);

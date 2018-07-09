@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CounterFileReader implements ItemReader<String> {
 
-    Logger log = LoggerFactory.getLogger(CounterFileReader.class);
+    private Logger log = LoggerFactory.getLogger(CounterFileReader.class);
 
     @Value("#{jobParameters['counter.file.name'] ?: ''}")
     private String filename;

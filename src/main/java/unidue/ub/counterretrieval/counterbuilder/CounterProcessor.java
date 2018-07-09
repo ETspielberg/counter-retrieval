@@ -122,14 +122,22 @@ public class CounterProcessor implements ItemProcessor<String, CounterCollection
             wrapper.setPropertyValue("year", year);
             for (String activityName: activityNames) {
                 String propertyName = "";
-                if (activityName.equals("regular searches"))
-                    propertyName = "regularSearches";
-                else if (activityName.equals("result clicks"))
-                    propertyName = "resultClicks";
-                else if (activityName.equals("record views"))
-                    propertyName = "recordViews";
-                else if (activityName.equals("federated and automated searches") || activityName.equals("federated searches") || activityName.equals("automated searches"))
-                    propertyName = "federatedAndAutomatedSearches";
+                switch (activityName) {
+                    case "regular searches":
+                        propertyName = "regularSearches";
+                        break;
+                    case "result clicks":
+                        propertyName = "resultClicks";
+                        break;
+                    case "record views":
+                        propertyName = "recordViews";
+                        break;
+                    case "federated and automated searches":
+                    case "federated searches":
+                    case "automated searches":
+                        propertyName = "federatedAndAutomatedSearches";
+                        break;
+                }
                 if (propertyName.isEmpty())
                     continue;
                 wrapper.setPropertyValue(propertyName, map.get(activityName)[dateKey]);
