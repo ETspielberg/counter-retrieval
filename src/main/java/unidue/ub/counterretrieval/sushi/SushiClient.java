@@ -59,7 +59,7 @@ public class SushiClient {
     }
 
     public SOAPMessage getResponse() throws SOAPException {
-        log.info("requesting UsageData for " + this.sushiprovider + " for time range " + startTime.format(dtf) + " till " + endTime.format(dtf));
+        log.info("requesting UsageData for " + this.sushiprovider.getIdentifier() + " for time range " + startTime.format(dtf) + " till " + endTime.format(dtf));
 
         SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
         SOAPConnection soapConnection = soapConnectionFactory.createConnection();

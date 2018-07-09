@@ -42,6 +42,7 @@ public class CounterTools {
      * @exception SOAPException thrown upon errors occurring parsing the SUSHI response
      * @exception IOException thrown upon errors occurring writing of the SUSHI response to the SAX-Buuilder
      * @exception JDOMException thrown upon errors parsing the xml structure of the SUSHI response
+     * @exception CounterConversionException thrown if the CounterTools
      */
     public static List<? extends Counter> convertSOAPMessageToCounters(SOAPMessage sushi) throws SOAPException, IOException, JDOMException, CounterConversionException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -69,8 +70,6 @@ public class CounterTools {
                     return convertCounterElementsToDatabaseCounters(reportItems);
             }
         } catch (Exception e) {
-            log.warn("could not convert SOAP response: \n");
-            log.warn(sushiString);
             throw new CounterConversionException("could not convert SOAP response: " + sushiString);
         }
         return null;
@@ -126,7 +125,6 @@ public class CounterTools {
                 counters.add(counter);
             }
         }
-        log.info("read " + counters.size() + " database counter statistics from counter element.");
         return counters;
     }
 
@@ -234,7 +232,6 @@ public class CounterTools {
                 counters.add(counter);
             }
         }
-        log.info("read " + counters.size() + " database counter statistics from counter element.");
         return counters;
     }
 
@@ -350,7 +347,6 @@ public class CounterTools {
                 }
             }
         }
-        log.info("read " + counters.size() + " counter statistics from counter element.");
         return counters;
     }
 }

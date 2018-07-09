@@ -87,20 +87,23 @@ public class SushiCounterReader implements ItemReader<Counter> {
                     addCountersToList(countersFound);
                     timeshift += 1;
                 }
+                break;
             }
             case "year": {
                 log.info("collecting counter data for year");
-                for (int i = 1; i<= 12; i++) {
-                    LocalDateTime start = LocalDateTime.of(year,i,1,0,0);
+                for (int i = 1; i <= 12; i++) {
+                    LocalDateTime start = LocalDateTime.of(year, i, 1, 0, 0);
                     LocalDateTime end = start.plusMonths(1).minusDays(1);
-                    List<Counter> countersFound = executeSushiClient(sushiClient,start,end);
+                    List<Counter> countersFound = executeSushiClient(sushiClient, start, end);
                     addCountersToList(countersFound);
                 }
-            }case "month": {
+                break;
+            }
+            case "month": {
                 log.info("collecting counter data for month");
-                LocalDateTime start = LocalDateTime.of(year,month,1,0,0);
+                LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
                 LocalDateTime end = start.plusMonths(1).minusDays(1);
-                List<Counter> countersFound = executeSushiClient(sushiClient,start,end);
+                List<Counter> countersFound = executeSushiClient(sushiClient, start, end);
                 addCountersToList(countersFound);
             }
         }
@@ -141,8 +144,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
                 countersFound = (List<Counter>) CounterTools.convertSOAPMessageToCounters(soapMessage);
                 counterLog.setStatus("SUCCESS");
                 counterLog.setComment("got " + String.valueOf(countersFound.size()) + " counters from conversion of SOAP response");
-            }
-            else {
+            } else {
                 counterLog.setStatus("ERROR");
                 counterLog.setError("SOAP response is null");
             }
