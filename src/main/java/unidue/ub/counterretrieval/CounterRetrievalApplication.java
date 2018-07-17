@@ -6,8 +6,9 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-@EnableEurekaClient
+
 @SpringBootApplication
+@EnableEurekaClient
 public class CounterRetrievalApplication  extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {

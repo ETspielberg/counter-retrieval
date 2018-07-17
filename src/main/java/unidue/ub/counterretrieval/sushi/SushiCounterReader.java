@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import unidue.ub.counterretrieval.CounterTools;
-import unidue.ub.counterretrieval.datarepositories.CounterLogRepository;
+import unidue.ub.counterretrieval.settingsrepositories.CounterLogRepository;
 import unidue.ub.counterretrieval.model.data.Counter;
-import unidue.ub.counterretrieval.model.data.CounterLog;
+import unidue.ub.counterretrieval.model.settings.CounterLog;
 import unidue.ub.counterretrieval.model.settings.Sushiprovider;
 
 import javax.xml.soap.SOAPException;
@@ -92,6 +92,9 @@ public class SushiCounterReader implements ItemReader<Counter> {
             case "year": {
                 log.info("collecting counter data for year");
                 for (int i = 1; i <= 12; i++) {
+                    if(year >= TODAY.getYear() && i >= TODAY.getMonthValue())
+                        break;
+
                     LocalDateTime start = LocalDateTime.of(year, i, 1, 0, 0);
                     LocalDateTime end = start.plusMonths(1).minusDays(1);
                     List<Counter> countersFound = executeSushiClient(sushiClient, start, end);

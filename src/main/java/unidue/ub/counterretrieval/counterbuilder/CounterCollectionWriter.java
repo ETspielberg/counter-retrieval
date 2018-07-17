@@ -15,8 +15,6 @@ import java.util.List;
 @StepScope
 public class CounterCollectionWriter implements ItemWriter<CounterCollection> {
 
-    private Logger log = LoggerFactory.getLogger(CounterCollectionWriter.class);
-
     @Autowired
     private DataWriter dataWriter;
 

@@ -7,12 +7,19 @@ import org.springframework.batch.support.transaction.ResourcelessTransactionMana
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
+import unidue.ub.counterretrieval.model.settings.Sushiprovider;
 
 @Configuration
-public class BatchConfiguration {
+public class BatchConfiguration extends RepositoryRestConfigurerAdapter {
 
+    @Override
+    public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+        config.exposeIdsFor(Sushiprovider.class);
+    }
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

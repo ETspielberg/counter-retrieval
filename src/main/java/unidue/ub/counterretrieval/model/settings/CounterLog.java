@@ -1,4 +1,4 @@
-package unidue.ub.counterretrieval.model.data;
+package unidue.ub.counterretrieval.model.settings;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
