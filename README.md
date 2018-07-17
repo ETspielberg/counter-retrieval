@@ -1,8 +1,14 @@
 # Counter Retrieval Service
 
-This microservice provides functionalities to retrieve usage data in a basic COUNTER-like format from SUSHI interfaces or from uploaded files. 
+This microservice provides functionalities to retrieve usage data in a basic COUNTER-like format from SUSHI interfaces or from uploaded files.
+Data are stored in flattened database tables.
 
-It comprises of Spring Batch services and several repositories. It uses three databases:
+Currently implemented are journal report 1, book reports 1 and 2 and database reports 
+
+
+## Structure
+The service comprises of a Spring Batch service and several repositories. It can be deployed in a microservice architecture. 
+It uses three databases:
  
 - The default datasource stores the SUSHI-Profiles, log-data and Spring Batch data. 
 - The second one ("data") is used to store the retrieved usage data.
