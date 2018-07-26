@@ -34,7 +34,7 @@ public class Sushiprovider extends Profile {
     private int sushiRelease;
 
 	@Column(name="report_types")
-    private String reportTypes;
+    private String[] reportTypes;
     
     public Sushiprovider() {
         name = "";
@@ -45,7 +45,7 @@ public class Sushiprovider extends Profile {
         sushiCustomerReferenceID = "";
         sushiCustomerReferenceName = "";
         sushiRelease = 4;
-        reportTypes = "JR1 BR2";
+        reportTypes = new String[]{"JR1"};
     }
 
 	/**
@@ -175,11 +175,11 @@ public class Sushiprovider extends Profile {
 	public void setSushiCustomerReferenceName(String sushiCustomerReferenceName) {
         this.sushiCustomerReferenceName = sushiCustomerReferenceName;
     }
-	public String getReportTypes() {
+	public String[] getReportTypes() {
 		return reportTypes;
 	}
 
-	public void setReportTypes(String reportTypes) {
+	public void setReportTypes(String[] reportTypes) {
 		this.reportTypes = reportTypes;
 	}
 }

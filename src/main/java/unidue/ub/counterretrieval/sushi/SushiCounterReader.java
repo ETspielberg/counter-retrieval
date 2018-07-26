@@ -1,6 +1,5 @@
 package unidue.ub.counterretrieval.sushi;
 
-import org.jdom2.JDOMException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
@@ -18,9 +17,7 @@ import unidue.ub.counterretrieval.model.data.Counter;
 import unidue.ub.counterretrieval.model.settings.CounterLog;
 import unidue.ub.counterretrieval.model.settings.Sushiprovider;
 
-import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +53,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
     }
 
     @Override
-    public Counter read() throws JDOMException, SOAPException, IOException {
+    public Counter read() {
         if (!collected)
             collectCounters();
         if (!counters.isEmpty())
@@ -64,7 +61,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
         return null;
     }
 
-    private void collectCounters() throws JDOMException, SOAPException, IOException {
+    private void collectCounters() {
         SushiClient sushiClient = new SushiClient();
         sushiClient.setSushiprovider(sushiprovider);
         sushiClient.setReportType(type);
@@ -82,13 +79,16 @@ public class SushiCounterReader implements ItemReader<Counter> {
                 break;
             }
             case "full": {
-                int errors = 0;
-                while (errors <= 2) {
-                    List<Counter> countersFound = executeSushiClient(sushiClient, timeshift);
-                    addCountersToList(countersFound);
-                    timeshift += 1;
-                    if (countersFound.size() == 0)
-                        errors += 1;
+                for(String reportType : sushiprovider.getReportTypes()) {
+                    int errors = 0;
+                    while (errors <= 2) {
+                        sushiClient.setReportType(reportType);
+                        List<Counter> countersFound = executeSushiClient(sushiClient, timeshift);
+                        addCountersToList(countersFound);
+                        timeshift += 1;
+                        if (countersFound.size() == 0)
+                            errors += 1;
+                    }
                 }
                 break;
             }
