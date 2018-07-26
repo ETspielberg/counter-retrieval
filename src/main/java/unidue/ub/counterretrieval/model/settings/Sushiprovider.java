@@ -2,6 +2,8 @@ package unidue.ub.counterretrieval.model.settings;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Plain Old Java Object as representation of a SUSHI provider with all the necessary data to retrieve the reports.
@@ -34,7 +36,7 @@ public class Sushiprovider extends Profile {
     private int sushiRelease;
 
 	@Column(name="report_types")
-    private String[] reportTypes;
+    private Set<String> reportTypes;
     
     public Sushiprovider() {
         name = "";
@@ -45,7 +47,7 @@ public class Sushiprovider extends Profile {
         sushiCustomerReferenceID = "";
         sushiCustomerReferenceName = "";
         sushiRelease = 4;
-        reportTypes = new String[]{"JR1"};
+        reportTypes = new HashSet<>();
     }
 
 	/**
@@ -175,11 +177,11 @@ public class Sushiprovider extends Profile {
 	public void setSushiCustomerReferenceName(String sushiCustomerReferenceName) {
         this.sushiCustomerReferenceName = sushiCustomerReferenceName;
     }
-	public String[] getReportTypes() {
+	public Set<String> getReportTypes() {
 		return reportTypes;
 	}
 
-	public void setReportTypes(String[] reportTypes) {
+	public void setReportTypes(Set<String> reportTypes) {
 		this.reportTypes = reportTypes;
 	}
 }
