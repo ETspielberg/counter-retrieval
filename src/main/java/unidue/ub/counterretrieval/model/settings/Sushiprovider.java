@@ -1,6 +1,7 @@
 package unidue.ub.counterretrieval.model.settings;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class Sushiprovider extends Profile {
     private int sushiRelease;
 
 	@Column(name="report_types")
+	@ElementCollection(targetClass=String.class)
     private Set<String> reportTypes;
     
     public Sushiprovider() {
