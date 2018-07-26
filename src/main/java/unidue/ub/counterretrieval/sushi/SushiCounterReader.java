@@ -82,10 +82,13 @@ public class SushiCounterReader implements ItemReader<Counter> {
                 break;
             }
             case "full": {
-                while (TODAY.minusMonths(timeshift).getYear() >= 2017) {
+                int errors = 0;
+                while (errors <= 2) {
                     List<Counter> countersFound = executeSushiClient(sushiClient, timeshift);
                     addCountersToList(countersFound);
                     timeshift += 1;
+                    if (countersFound.size() == 0)
+                        errors += 1;
                 }
                 break;
             }

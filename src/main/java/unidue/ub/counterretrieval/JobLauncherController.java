@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import unidue.ub.counterretrieval.settingsrepositories.CounterLogRepository;
+import unidue.ub.counterretrieval.settingsrepositories.SushiproviderRepository;
 
 @Controller
 public class JobLauncherController {
@@ -24,6 +25,9 @@ public class JobLauncherController {
 
     @Autowired
     CounterLogRepository counterLogRepository;
+
+    @Autowired
+    SushiproviderRepository sushiproviderRepository;
 
     @RequestMapping("/sushi")
     public ResponseEntity<?> runSushiClient(String identifier, String type, String mode, Long year, Long month) throws Exception {
@@ -52,5 +56,10 @@ public class JobLauncherController {
     @GetMapping("counterlog/forSushiprovider")
     public ResponseEntity<?> getCounterLogsForSushiprovider(String sushiprovider) {
        return ResponseEntity.ok(counterLogRepository.findAllBySushiproviderOrderByYear(sushiprovider));
+    }
+
+    @GetMapping("sushiprovider/all")
+    public ResponseEntity<?> getAllSushiproviders() {
+        return ResponseEntity.ok(sushiproviderRepository.findAll());
     }
 }
