@@ -36,7 +36,7 @@ public class Sushiprovider extends Profile {
 	@Column(name="sushi_release")
     private int sushiRelease;
 
-	@ElementCollection(targetClass=String.class)
+	@ElementCollection
 	@Column(name="report_types")
     private Set<String> reportTypes;
     
