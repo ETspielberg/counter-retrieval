@@ -3,7 +3,9 @@ package unidue.ub.counterretrieval.model.settings;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,9 +38,8 @@ public class Sushiprovider extends Profile {
 	@Column(name="sushi_release")
     private int sushiRelease;
 
-	@ElementCollection
 	@Column(name="report_types")
-    private Set<String> reportTypes;
+    private String reportTypes;
     
     public Sushiprovider() {
         name = "";
@@ -49,7 +50,7 @@ public class Sushiprovider extends Profile {
         sushiCustomerReferenceID = "";
         sushiCustomerReferenceName = "";
         sushiRelease = 4;
-        reportTypes = new HashSet<>();
+        reportTypes = "";
     }
 
 	/**
@@ -179,11 +180,12 @@ public class Sushiprovider extends Profile {
 	public void setSushiCustomerReferenceName(String sushiCustomerReferenceName) {
         this.sushiCustomerReferenceName = sushiCustomerReferenceName;
     }
-	public Set<String> getReportTypes() {
-		return reportTypes;
+	public List<String> getReportTypes() {
+		return Arrays.asList(reportTypes.split(" "));
 	}
 
-	public void setReportTypes(Set<String> reportTypes) {
-		this.reportTypes = reportTypes;
+	public void setReportTypes(List<String> reportTypes) {
+		this.reportTypes = "";
+		for (String reportType: reportTypes) this.reportTypes += " " + reportType;
 	}
 }
