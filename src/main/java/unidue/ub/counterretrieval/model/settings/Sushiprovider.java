@@ -184,5 +184,6 @@ public class Sushiprovider extends Profile {
 	public void setReportTypes(String[] reportTypes) {
 		this.reportTypes = "";
 		for (String reportType: reportTypes) this.reportTypes += " " + reportType;
+		this.reportTypes = this.reportTypes.trim();
 	}
 }
