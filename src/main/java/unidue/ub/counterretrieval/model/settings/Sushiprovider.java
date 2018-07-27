@@ -3,10 +3,7 @@ package unidue.ub.counterretrieval.model.settings;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Plain Old Java Object as representation of a SUSHI provider with all the necessary data to retrieve the reports.
@@ -180,11 +177,11 @@ public class Sushiprovider extends Profile {
 	public void setSushiCustomerReferenceName(String sushiCustomerReferenceName) {
         this.sushiCustomerReferenceName = sushiCustomerReferenceName;
     }
-	public List<String> getReportTypes() {
-		return Arrays.asList(reportTypes.split(" "));
+	public String[] getReportTypes() {
+		return reportTypes.split(" ");
 	}
 
-	public void setReportTypes(List<String> reportTypes) {
+	public void setReportTypes(String[] reportTypes) {
 		this.reportTypes = "";
 		for (String reportType: reportTypes) this.reportTypes += " " + reportType;
 	}
