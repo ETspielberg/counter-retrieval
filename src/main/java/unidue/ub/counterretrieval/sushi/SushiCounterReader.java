@@ -67,11 +67,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
         sushiClient.setReportType(type);
         LocalDateTime TODAY = LocalDateTime.now();
         counters = new ArrayList<>();
-        int timeshift;
-        if (TODAY.getDayOfMonth() < 15)
-            timeshift = 3;
-        else
-            timeshift = 2;
+        int timeshift = resetTimeshift();
         switch (mode) {
             case "update": {
                 log.info("collecting counter data for last month");
@@ -80,6 +76,8 @@ public class SushiCounterReader implements ItemReader<Counter> {
             }
             case "full": {
                 for(String reportType : sushiprovider.getReportTypes()) {
+                    log.info("retrieving " + reportType + " counter reports");
+                    timeshift = resetTimeshift();
                     int errors = 0;
                     while (errors <= 2) {
                         sushiClient.setReportType(reportType);
@@ -115,6 +113,13 @@ public class SushiCounterReader implements ItemReader<Counter> {
         }
         log.info("collected " + counters.size() + " counters in total");
         collected = true;
+    }
+
+    private int resetTimeshift() {
+        if (LocalDateTime.now().getDayOfMonth() < 15)
+            return 3;
+        else
+            return 2;
     }
 
     private void addCountersToList(List<Counter> countersFound) {
