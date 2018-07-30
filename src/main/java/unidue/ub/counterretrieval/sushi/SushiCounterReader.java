@@ -86,6 +86,8 @@ public class SushiCounterReader implements ItemReader<Counter> {
                         timeshift += 1;
                         if (countersFound.size() == 0)
                             errors += 1;
+                        else
+                            errors = 0;
                     }
                 }
                 break;
@@ -143,7 +145,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
         CounterLog counterLog = new CounterLog();
         counterLog.setMonth(start.getMonthValue());
         counterLog.setYear(start.getYear());
-        counterLog.setReportType(type);
+        counterLog.setReportType(sushiClient.getReportType());
         counterLog.setSushiprovider(sushiprovider.getIdentifier());
         counterLog.calculateId();
         List<Counter> countersFound = new ArrayList<>();

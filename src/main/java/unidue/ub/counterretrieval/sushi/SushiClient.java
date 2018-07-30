@@ -58,6 +58,10 @@ public class SushiClient {
         this.reportType = reportType;
     }
 
+    public String getReportType() {
+        return reportType;
+    }
+
     public SOAPMessage getResponse() throws SOAPException {
         log.info("requesting UsageData for " + this.sushiprovider.getIdentifier() + " for time range " + startTime.format(dtf) + " till " + endTime.format(dtf));
 
