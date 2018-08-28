@@ -9,5 +9,7 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "counterlog", path = "counterlog")
 public interface CounterLogRepository extends PagingAndSortingRepository<CounterLog, String> {
 
-    public List<CounterLog> findAllBySushiproviderOrderByYear(String sushiprovider);
+    List<CounterLog> findAllBySushiproviderOrderByYear(String sushiprovider);
+
+    CounterLog getById(String id);
 }

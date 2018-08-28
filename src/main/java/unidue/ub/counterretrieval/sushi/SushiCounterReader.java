@@ -70,8 +70,10 @@ public class SushiCounterReader implements ItemReader<Counter> {
         int timeshift = resetTimeshift();
         switch (mode) {
             case "update": {
-                log.info("collecting counter data for last month");
-                counters = executeSushiClient(sushiClient, timeshift);
+                for(String reportType : sushiprovider.getReportTypes()) {
+                    log.info("retrieving " + reportType + " counter reports");
+                    counters = executeSushiClient(sushiClient, timeshift);
+                }
                 break;
             }
             case "full": {
@@ -142,12 +144,16 @@ public class SushiCounterReader implements ItemReader<Counter> {
     }
 
     private List<Counter> executeSushiClient(SushiClient sushiClient, LocalDateTime start, LocalDateTime end) {
-        CounterLog counterLog = new CounterLog();
-        counterLog.setMonth(start.getMonthValue());
-        counterLog.setYear(start.getYear());
-        counterLog.setReportType(sushiClient.getReportType());
-        counterLog.setSushiprovider(sushiprovider.getIdentifier());
-        counterLog.calculateId();
+        String identifier = sushiprovider.getIdentifier() + "-" + sushiClient.getReportType() + "-" + String.valueOf(start.getYear()) + "-" + String.valueOf(start.getMonth());
+        CounterLog counterLog = counterLogRepository.getById(identifier);
+        if (counterLog == null) {
+            counterLog = new CounterLog();
+            counterLog.setMonth(start.getMonthValue());
+            counterLog.setYear(start.getYear());
+            counterLog.setReportType(sushiClient.getReportType());
+            counterLog.setSushiprovider(sushiprovider.getIdentifier());
+            counterLog.calculateId();
+        }
         List<Counter> countersFound = new ArrayList<>();
         sushiClient.setStartTime(start);
         sushiClient.setEndTime(end);

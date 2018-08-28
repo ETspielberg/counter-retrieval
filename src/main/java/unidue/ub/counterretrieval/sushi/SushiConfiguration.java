@@ -93,7 +93,7 @@ public class SushiConfiguration {
 
     @Bean
     public Flow sushiFlow() {
-        FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("manifestationFlow");
+        FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("sushiFlow");
         return flowBuilder
                 .start(sushiproviderSetStart())
                 .next(step())

@@ -11,6 +11,7 @@ import java.util.Date;
 public class CounterLog {
 
     @Id
+    @Column(unique=true)
     private String id;
 
     private String sushiprovider;
