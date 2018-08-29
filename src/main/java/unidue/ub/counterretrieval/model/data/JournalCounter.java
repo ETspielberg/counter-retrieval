@@ -28,20 +28,26 @@ public class JournalCounter extends Counter {
     private String onlineIssn = "";
 
     private String doi = "";
-    
+
+    @Column(columnDefinition = "TEXT")
     private String category = "";
-    
+
+    @Column(columnDefinition = "TEXT")
     private String proprietary = "";
-    
+
+    @Column(columnDefinition = "TEXT")
     private String abbreviation = "";
 
-    @Column(name="full_name")
+    @Column(name="full_name", columnDefinition = "TEXT")
     private String fullName = "";
-    
+
+    @Column(columnDefinition = "TEXT")
     private String publisher = "";
 
+    @Column(columnDefinition = "TEXT")
     private String platform = "";
-    
+
+    @Column(columnDefinition = "TEXT")
     private String type = "";
     
     private int year;

@@ -13,14 +13,17 @@ public class EbookCounter extends Counter {
     @Id
     private String id;
 
+    @Column(columnDefinition = "TEXT")
     private String title = "";
 
     private String profile;
 
+    @Column(columnDefinition = "TEXT")
     private String publisher = "";
 
     private String doi = "";
 
+    @Column(columnDefinition = "TEXT")
     private String platform = "";
 
     private String proprietary = "";
