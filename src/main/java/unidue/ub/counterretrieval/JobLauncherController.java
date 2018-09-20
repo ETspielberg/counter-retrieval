@@ -3,13 +3,22 @@ package unidue.ub.counterretrieval;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import unidue.ub.counterretrieval.datarepositories.DatabaseCounterRepository;
+import unidue.ub.counterretrieval.datarepositories.EbookCounterRepository;
+import unidue.ub.counterretrieval.datarepositories.JournalCounterRepository;
+import unidue.ub.counterretrieval.model.data.EbookCounter;
+import unidue.ub.counterretrieval.model.data.JournalCounter;
 import unidue.ub.counterretrieval.settingsrepositories.CounterLogRepository;
 import unidue.ub.counterretrieval.settingsrepositories.SushiproviderRepository;
+
+import java.util.List;
 
 @Controller
 public class JobLauncherController {
@@ -23,14 +32,30 @@ public class JobLauncherController {
     @Autowired
     Job counterbuilderJob;
 
+    private SimpMessagingTemplate template;
+
+    @Autowired
+    public JobLauncherController(SimpMessagingTemplate template) {
+        this.template = template;
+    }
+
     @Autowired
     CounterLogRepository counterLogRepository;
 
     @Autowired
     SushiproviderRepository sushiproviderRepository;
 
+    @Autowired
+    private JournalCounterRepository journalCounterRepository;
+
+    @Autowired
+    private EbookCounterRepository ebookCounterRepository;
+
+    @Autowired
+    private DatabaseCounterRepository databaseCounterRepository;
+
     @RequestMapping("/sushi")
-    public ResponseEntity<?> runSushiClient(String identifier, String type, String mode, Long year, Long month) throws Exception {
+    public ResponseEntity<?> runSushiClient(String identifier, String type, String mode, Long year, Long month) {
         JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
         jobParametersBuilder.addString("sushiprovider.identifier", identifier)
                 .addString("sushi.type", type)
@@ -39,8 +64,14 @@ public class JobLauncherController {
                 .addLong("sushi.month", month)
                 .addLong("time",System.currentTimeMillis()).toJobParameters();
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
-        jobLauncher.run(sushiJob, jobParameters);
-        return ResponseEntity.status(HttpStatus.FOUND).build();
+        try {
+            jobLauncher.run(sushiJob, jobParameters);
+            this.template.convertAndSend("/profileUpdate", "{'identifier' : '" + identifier + "', 'status' : 'FINISHED'}");
+            return ResponseEntity.status(HttpStatus.FOUND).build();
+        } catch (Exception e) {
+            this.template.convertAndSend("/sushi/error", "{'identifier' : '" + identifier + "', 'status' : 'ERROR', 'message' : '" + e.getLocalizedMessage() + "*}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/counterbuilder")
@@ -53,13 +84,63 @@ public class JobLauncherController {
         return ResponseEntity.ok("successfuly run");
     }
 
-    @GetMapping("counterlog/forSushiprovider")
-    public ResponseEntity<?> getCounterLogsForSushiprovider(String sushiprovider) {
-       return ResponseEntity.ok(counterLogRepository.findAllBySushiproviderOrderByYear(sushiprovider));
+    @GetMapping("/journalcounter/getForIssn")
+    public ResponseEntity<?> getAlJournalCountersForIssn(@Param("issn") String issn) {
+        List<JournalCounter> list = journalCounterRepository.findAllByOnlineIssn(issn);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByPrintIssn(issn);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByDoi(issn);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByProprietary(issn);
+        return ResponseEntity.ok(list);
     }
 
-    @GetMapping("sushiprovider/all")
+    @GetMapping("/ebookcounter/getForIsbn")
+    public ResponseEntity<?> getAlEbookCountersForIsbn(@Param("isbn") String isbn) {
+        List<EbookCounter> list = ebookCounterRepository.findAllByOnlineIsbn(isbn);
+        if (list.size() == 0)
+            list = ebookCounterRepository.findAllByPrintIsbn(isbn);
+        if (list.size() == 0)
+            list = ebookCounterRepository.findAllByDoi(isbn);
+        if (list.size() == 0)
+            list = ebookCounterRepository.findAllByProprietary(isbn);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/counterlog/forSushiprovider")
+    public ResponseEntity<?> getCounterLogsForSushiprovider(String sushiprovider) {
+        return ResponseEntity.ok(counterLogRepository.findAllBySushiproviderOrderByYear(sushiprovider));
+    }
+
+    @GetMapping("/sushiprovider/all")
     public ResponseEntity<?> getAllSushiproviders() {
         return ResponseEntity.ok(sushiproviderRepository.findAll());
     }
+
+    @GetMapping("/journalcounter/getForPublisher")
+    public ResponseEntity<?> getAllJournalCountersForPublisher(@Param("publisher") String publisher) {
+        return ResponseEntity.ok(journalCounterRepository.findAllByPublisher(publisher));
+    }
+
+    @GetMapping("/journalcounter/getForPlatform")
+    public ResponseEntity<?> getAllJournalCountersForPlatform(@Param("platform") String platform) {
+        return ResponseEntity.ok(journalCounterRepository.findAllByPlatform(platform));
+    }
+
+    @GetMapping("/ebookcounter/getForPublisher")
+    public ResponseEntity<?> getAllEbookCountersForPublisher(@Param("publisher") String publisher) {
+        return ResponseEntity.ok(ebookCounterRepository.findAllByPublisher(publisher));
+    }
+
+    @GetMapping("/ebookcounter/getForPlatform")
+    public ResponseEntity<?> getAllEbookCountersForPlatform(@Param("platform") String platform) {
+        return ResponseEntity.ok(ebookCounterRepository.findAllByPlatform(platform));
+    }
+
+    @GetMapping("databasecounter/getForPlatform")
+    public ResponseEntity<?> getAllDatabaseCounterForPlatform(@Param("platform") String platform) {
+        return ResponseEntity.ok(databaseCounterRepository.getAllByPlatform(platform));
+    }
+
 }
