@@ -11,16 +11,16 @@ import java.time.LocalDate;
 public class DatabaseCounter extends Counter {
 
     @Column(columnDefinition = "TEXT")
-    private String title = "";
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String platform = "";
+    private String platform;
 
     @Column(columnDefinition = "TEXT")
     private String profile;
 
     @Column(columnDefinition = "TEXT")
-    private String publisher = "";
+    private String publisher;
 
     private int month;
 
@@ -39,6 +39,7 @@ public class DatabaseCounter extends Counter {
     private long recordViews = 0L;
 
     @Id
+    @Column(unique = true)
     private String id;
 
     public DatabaseCounter() {

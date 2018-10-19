@@ -7,9 +7,9 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 @Configuration
-@EnableWebSocketMessageBroker
+//@EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
-
+/*
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/comm")
                 .setAllowedOrigins("*")
@@ -19,5 +19,5 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/sushi")
                 .enableSimpleBroker("/profileUpdate");
-    }
+    }*/
 }

@@ -14,7 +14,7 @@ import java.util.*;
 public class Sushiprovider extends Profile {
 
     private String name;
-    
+
     private String sushiURL;
 
     @Column(name="sushi_requestorid")
@@ -37,7 +37,7 @@ public class Sushiprovider extends Profile {
 
 	@Column(name="report_types")
     private String reportTypes;
-    
+
     public Sushiprovider() {
         name = "";
         sushiURL = "";
@@ -65,7 +65,7 @@ public class Sushiprovider extends Profile {
 	public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
 	 * returns the release of the SUSHI API
 	 * @return the release of the SUSHI API
@@ -177,6 +177,7 @@ public class Sushiprovider extends Profile {
 	public void setSushiCustomerReferenceName(String sushiCustomerReferenceName) {
         this.sushiCustomerReferenceName = sushiCustomerReferenceName;
     }
+
 	public String[] getReportTypes() {
 		return reportTypes.split(" ");
 	}

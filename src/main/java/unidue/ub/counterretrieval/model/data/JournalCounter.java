@@ -17,6 +17,7 @@ import java.time.LocalDate;
 public class JournalCounter extends Counter {
     
     @Id
+    @Column(unique = true)
     private String id;
 
     private String profile;

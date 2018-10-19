@@ -27,3 +27,28 @@ spring.datasource.data-username=<username data database>
 spring.datasource.password=<password data database>
 ```
 
+The service has been tested with two Postgresql-databases. 
+
+## SUSHI-Services
+
+The service is controled via HTTP-commands. The port of the service is given by the application.properties.
+
+Sushiprovider are stored by POSTing the provider-data in a JSON-Format to 
+```
+<server-address>:<server-port>/sushiprovider
+```
+:
+
+```
+JSON-Format
+```
+GET-request to the same address yield a HATEOAS-conform response listing all the stored providers. single sushiproviders can be accessed via its identifier 
+```
+<server-address>:<server-port>/sushiprovider/{identifier}
+```
+
+These requests can be either made by command-line tools such as curl or from Web-Frontend such as the [Media-Frontend](https://github.com/ETspielberg/media-management)
+
+To import data from a stored SUSHI provider, 
+
+

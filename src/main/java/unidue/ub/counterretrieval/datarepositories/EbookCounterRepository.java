@@ -10,12 +10,16 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "ebookcounter", path = "ebookcounter")
 public interface EbookCounterRepository extends PagingAndSortingRepository<EbookCounter, String> {
 
-    public List<EbookCounter> findAllByOnlineIsbn(@Param("onlineIssn") String onlineIssn);
+    List<EbookCounter> findAllByOnlineIsbn(@Param("onlineIssn") String onlineIssn);
 
-    public List<EbookCounter> findAllByPrintIsbn(@Param("printIssn") String printIssn);
+    List<EbookCounter> findAllByPrintIsbn(@Param("printIssn") String printIssn);
 
-    public List<EbookCounter> findAllByDoi(@Param("doi") String doi);
+    List<EbookCounter> findAllByDoi(@Param("doi") String doi);
 
-    public List<EbookCounter> findAllByProprietary(@Param("proprietaryIdentifier") String proprietaryIdentifier);
+    List<EbookCounter> findAllByProprietary(@Param("proprietaryIdentifier") String proprietaryIdentifier);
+
+    List<EbookCounter> findAllByPublisher(@Param("publisher") String publisher);
+
+    List<EbookCounter> findAllByPlatform(@Param("platform") String platform);
 	
 }

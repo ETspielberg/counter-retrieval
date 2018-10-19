@@ -11,5 +11,4 @@ import java.util.List;
 public interface DatabaseCounterRepository extends PagingAndSortingRepository<DatabaseCounter, String> {
 
     List<DatabaseCounter> getAllByPlatform(@Param("platform") String platform);
-	
 }

@@ -1,5 +1,7 @@
 package unidue.ub.counterretrieval;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +37,13 @@ public class JobLauncherController {
 
     private SimpMessagingTemplate template;
 
+    private Logger log = LoggerFactory.getLogger(JobLauncherController.class);
+/*
     @Autowired
     public JobLauncherController(SimpMessagingTemplate template) {
         this.template = template;
     }
-
+*/
     @Autowired
     CounterLogRepository counterLogRepository;
 
@@ -66,12 +71,31 @@ public class JobLauncherController {
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
         try {
             jobLauncher.run(sushiJob, jobParameters);
-            this.template.convertAndSend("/profileUpdate", "{'identifier' : '" + identifier + "', 'status' : 'FINISHED'}");
+            //this.template.convertAndSend("/profileUpdate", "{'identifier' : '" + identifier + "', 'status' : 'FINISHED'}");
             return ResponseEntity.status(HttpStatus.FOUND).build();
         } catch (Exception e) {
-            this.template.convertAndSend("/sushi/error", "{'identifier' : '" + identifier + "', 'status' : 'ERROR', 'message' : '" + e.getLocalizedMessage() + "*}");
+            //this.template.convertAndSend("/sushi/error", "{'identifier' : '" + identifier + "', 'status' : 'ERROR', 'message' : '" + e.getLocalizedMessage() + "*}");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @Scheduled(cron="0 0 20 20 * ?")
+    @RequestMapping("/updateAllSushi")
+    public void updateAllSushi() {
+        sushiproviderRepository.findAll().forEach(
+                sushiprovider -> {
+                    JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
+                    jobParametersBuilder.addString("sushiprovider.identifier", sushiprovider.getIdentifier())
+                            .addString("sushi.type", "update")
+                            .addLong("time",System.currentTimeMillis()).toJobParameters();
+                    JobParameters jobParameters = jobParametersBuilder.toJobParameters();
+                    try {
+                        jobLauncher.run(sushiJob, jobParameters);
+                    } catch (Exception e) {
+                        log.info("could not start Sushiprovider " + sushiprovider.getIdentifier());
+                    }
+                }
+        );
     }
 
     @GetMapping("/counterbuilder")
@@ -142,5 +166,4 @@ public class JobLauncherController {
     public ResponseEntity<?> getAllDatabaseCounterForPlatform(@Param("platform") String platform) {
         return ResponseEntity.ok(databaseCounterRepository.getAllByPlatform(platform));
     }
-
 }

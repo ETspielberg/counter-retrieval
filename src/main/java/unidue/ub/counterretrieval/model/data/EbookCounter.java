@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class EbookCounter extends Counter {
 
     @Id
+    @Column(unique = true)
     private String id;
 
     @Column(columnDefinition = "TEXT")
