@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import unidue.ub.counterretrieval.DataWriter;
+import unidue.ub.counterretrieval.JobExecutionListener;
 import unidue.ub.counterretrieval.model.data.Counter;
 import unidue.ub.counterretrieval.model.settings.Status;
 
@@ -57,6 +58,11 @@ public class SushiConfiguration {
     }
 
     @Bean
+    public SushiproviderSettingTasklet sushiErrorTasklet() {
+        return new SushiproviderSettingTasklet().setStatus(Status.ERROR);
+    }
+
+    @Bean
     public SushiFlowDecision sushiDecision() {
         return new SushiFlowDecision();
     }
@@ -73,6 +79,11 @@ public class SushiConfiguration {
         return stepBuilderFactory.get("endStep")
                 .tasklet(sushiFinishedTasklet())
                 .build();
+    }
+
+    @Bean
+    public JobExecutionListener errorListener() {
+        return new JobExecutionListener();
     }
 
     @Bean
@@ -103,6 +114,7 @@ public class SushiConfiguration {
     @Bean
     public Job sushiJob() {
         return jobBuilderFactory.get("sushiJob")
+                .listener(errorListener())
                 .incrementer(new RunIdIncrementer())
                 .start(init())
                 .next(sushiDecision())

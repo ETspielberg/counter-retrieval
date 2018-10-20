@@ -92,7 +92,7 @@ public class JobLauncherController {
                     try {
                         jobLauncher.run(sushiJob, jobParameters);
                     } catch (Exception e) {
-                        log.info("could not start Sushiprovider " + sushiprovider.getIdentifier());
+                        log.info("could not run Sushiprovider " + sushiprovider.getIdentifier());
                     }
                 }
         );
