@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ import unidue.ub.counterretrieval.settingsrepositories.SushiproviderRepository;
 import java.util.List;
 
 @Controller
+@EnableScheduling
 public class JobLauncherController {
 
     @Autowired
@@ -79,7 +81,7 @@ public class JobLauncherController {
         }
     }
 
-    @Scheduled(cron="0 0 20 20 * ?")
+    @Scheduled(cron="0 0 20 23 * ?")
     @RequestMapping("/updateAllSushi")
     public void updateAllSushi() {
         sushiproviderRepository.findAll().forEach(
