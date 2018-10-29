@@ -81,14 +81,14 @@ public class JobLauncherController {
         }
     }
 
-    @Scheduled(cron="0 0 20 23 * ?")
+    @Scheduled(cron="0 0 29 23 * ?")
     @RequestMapping("/updateAllSushi")
     public void updateAllSushi() {
         sushiproviderRepository.findAll().forEach(
                 sushiprovider -> {
                     JobParametersBuilder jobParametersBuilder = new JobParametersBuilder();
                     jobParametersBuilder.addString("sushiprovider.identifier", sushiprovider.getIdentifier())
-                            .addString("sushi.type", "update")
+                            .addString("sushi.mode", "update")
                             .addLong("time",System.currentTimeMillis()).toJobParameters();
                     JobParameters jobParameters = jobParametersBuilder.toJobParameters();
                     try {
