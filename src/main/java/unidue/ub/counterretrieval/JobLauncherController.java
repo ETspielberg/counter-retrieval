@@ -81,7 +81,7 @@ public class JobLauncherController {
         }
     }
 
-    @Scheduled(cron="0 0 23 29 * ?")
+    @Scheduled(cron="0 0 23 12 * ?")
     @RequestMapping("/updateAllSushi")
     public void updateAllSushi() {
         sushiproviderRepository.findAll().forEach(

@@ -72,6 +72,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
             case "update": {
                 for(String reportType : sushiprovider.getReportTypes()) {
                     log.info("retrieving " + reportType + " counter reports");
+                    sushiClient.setReportType(reportType);
                     counters = executeSushiClient(sushiClient, timeshift);
                 }
                 break;
