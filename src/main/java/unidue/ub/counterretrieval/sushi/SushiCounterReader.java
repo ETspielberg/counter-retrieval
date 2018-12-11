@@ -122,9 +122,9 @@ public class SushiCounterReader implements ItemReader<Counter> {
 
     private int resetTimeshift() {
         if (LocalDateTime.now().getDayOfMonth() < 15)
-            return 3;
-        else
             return 2;
+        else
+            return 1;
     }
 
     private void addCountersToList(List<Counter> countersFound) {
