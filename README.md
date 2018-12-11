@@ -124,6 +124,26 @@ http://localhost:11877/sushi?identifier=test&mode=month&year=2017&month=1
 By default, recent counter data (like in the update case above) are collected on the 20th of each month.
 
 
+### File import
+Usage data can also be imported using a file importer. The source directory is specified as property ```ub.statistics.data.dir``` with the subdirectory /counterbuilder.
+
+In a microservice environment this sorresponds to the upload directory of a file uploader, hence making an upload of usage data via a web frontend feasible.
+
+The file should be a csv file with the following columns for Journals:
+```Journal;Publisher;Platform;Journal DOI;Proprietary Identifier;Print ISSN;Online ISSN```
+ 
+
+
+
+Calling the endpoint
+
+```
+<server-address>:<server-port>/counterbuilder?filename=<filename>
+```
+
+reads in the saved csv file from the data folder, transforms the data and stores the counter data to the database.
+ 
+
 ## Retrieving stored counter data
 Counter data collected from the providers are stored into the data-database and cen be retreived by the data repository endpoints:
 
@@ -139,7 +159,7 @@ Counter data collected from the providers are stored into the data-database and 
 <server-address>:<server-port>/databasecounter
 ```
 
-Special endpoints exist for getting all data connecting to a certain publisher or platform, for example for the journal counters:
+Special endpoints exist for getting all data connecting to a certain publisher or platform, for example for the journal journalCounters:
 
 ```
 <server-address>:<server-port>/journalcounter/getForPublisher?publisher=<publisher-name>
@@ -149,7 +169,7 @@ Special endpoints exist for getting all data connecting to a certain publisher o
 <server-address>:<server-port>/journalcountergetForPlatform?platform=<platform-name>
 ```
 
-In addition journal counters can be retrieved using 
+In addition journal journalCounters can be retrieved using 
 
 ```
 <server-address>:<server-port>/getForIssn?issn=<issn>
@@ -157,7 +177,7 @@ In addition journal counters can be retrieved using
 
 In fact, if no online ISSN is present, print ISSN, DOI and proprietary identifiers are searched. 
 
-A similar mechanism is available for e-book counters 
+A similar mechanism is available for e-book journalCounters 
 
 ```
 <server-address>:<server-port>/getForIsbn?issn=<isbn>
