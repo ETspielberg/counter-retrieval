@@ -33,9 +33,9 @@ public class SushiClient {
         LocalDateTime TODAY = LocalDateTime.now();
         int timeshift;
         if (TODAY.getDayOfMonth() < 15)
-            timeshift = 3;
-        else
             timeshift = 2;
+        else
+            timeshift = 1;
         startTime = LocalDateTime.now().minusMonths(timeshift).withDayOfMonth(1);
         endTime = LocalDateTime.now().minusMonths(timeshift - 1).withDayOfMonth(1).minusDays(1);
         release = 4;
