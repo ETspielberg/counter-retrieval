@@ -100,4 +100,7 @@ public class JobLauncherController {
         return ResponseEntity.ok(sushiproviderRepository.findAll());
     }
 
+    @GetMapping("/sushiprovider/running")
+    public ResponseEntity<?> getActiveSushiproviderIdentifiers() {return ResponseEntity.ok(sushiproviderRepository.getActiveIdentifiers()); }
+
 }

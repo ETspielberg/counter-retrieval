@@ -27,21 +27,53 @@ public class StatsController {
         this.jdbcTemplate.setDataSource(dataSource);
     }
 
-    final private String getEbookStatsByPublisher = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM ebook_counter GROUP BY publisher, month, year;";
+    final private String selectPublisher = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
-    final private String getEbookStatsByPlatform = "SELECT platform as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM ebook_counter GROUP BY platform, month, year";
+    final private String selectPlatform = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
-    final private String getJournalStatsByPublisher = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM journal_counter GROUP BY publisher, month, year";
+    final private String selectPublisherYearly = "SELECT publisher as identifier, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
-    final private String getJournalStatsByPlatform = "SELECT platform as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM journal_counter GROUP BY platform, month, year";
+    final private String selectPlatformYearly = "SELECT platform as identifier, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
-    final private String getEbookStatsForPublisher = "SELECT platform as identifier, publisher, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM ebook_counter WHERE publisher = ? GROUP BY publisher, month, year, platform;";
+    final private String groupBy = " GROUP BY month, year, publisher, platform";
 
-    final private String getEbookStatsForPlatform = "SELECT publisher as identifier, platform, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM ebook_counter WHERE platform = ? GROUP BY platform, month, year, publisher;";
+    final private String groupByYearly = " GROUP BY year, publisher, platform";
 
-    final private String getJournalStatsForPublisher = "SELECT platform as identifier, publisher, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM journal_counter WHERE publisher = ? GROUP BY publisher, month, year, platform;";
+    final private String ebook = " From ebook_counter";
 
-    final private String getJournalStatsForPlatform = "SELECT publisher as identifier, platform, month, year, sum(total_requests) as requests, COUNT(total_requests) as items FROM journal_counter WHERE platform = ? GROUP BY publisher, platform, month, year;";
+    final private String journal = " From journal_counter";
+
+    final private String getEbookStatsByPublisher = selectPublisher + ebook + groupBy;
+
+    final private String getEbookStatsByPlatform = selectPlatform + ebook + groupBy;
+
+    final private String getJournalStatsByPublisher = selectPublisher + journal + groupBy;
+
+    final private String getJournalStatsByPlatform = selectPlatform + journal + groupBy;
+
+    final private String getEbookStatsForPublisher = selectPlatform + ebook + " WHERE publisher = ?" + groupBy;
+
+    final private String getEbookStatsForPlatform = selectPublisher + ebook + " WHERE platform = ?" + groupBy;
+
+    final private String getJournalStatsForPublisher = selectPlatform + journal + " WHERE publisher = ?" + groupBy;
+
+    final private String getJournalStatsForPlatform = selectPublisher + journal + " WHERE platform = ?" + groupBy;
+
+    final private String getEbookStatsByYearsByPublisher = selectPublisherYearly + ebook + groupByYearly;
+
+    final private String getEbookStatsByYearsByPlatform = selectPlatformYearly + ebook + groupByYearly;
+
+    final private String getEbookStatsForYearByPublisher = selectPublisherYearly + ebook +" where year = ?" + groupByYearly;
+
+    final private String getEbookStatsForYearByPlatform = selectPlatformYearly + ebook + " where year = ?" + groupByYearly;
+
+    final private String getJournalStatsByYearsByPublisher = selectPublisherYearly + journal + groupByYearly;
+
+    final private String getJournalStatsByYearsByPlatform = selectPlatformYearly + journal + groupByYearly ;
+
+    final private String getJournalStatsForYearByPublisher = selectPublisherYearly + journal + " where year = ?" + groupByYearly;
+
+    final private String getJournalStatsForYearByPlatform = selectPlatformYearly + journal + " where year = ?" + groupByYearly;
 
 
     @GetMapping("/ebookcounter/statsForpublisher")
@@ -90,6 +122,54 @@ public class StatsController {
     @GetMapping("/journalcounter/statsByplatform")
     public ResponseEntity<?> getJournalCounterStatsByPlatform() {
         List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getJournalStatsByPlatform, new Object[]{}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), rs.getInt("month"), rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/ebookcounter/statsByYearsByplatform")
+    public ResponseEntity<?> getEbookCounterStatsByYearsByPlatform() {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getEbookStatsByYearsByPlatform, new Object[]{}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/ebookcounter/statsByYearsBypublisher")
+    public ResponseEntity<?> getEbookCounterStatsByYearsByPublisher() {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getEbookStatsByYearsByPublisher, new Object[]{}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/ebookcounter/statsForYearByplatform")
+    public ResponseEntity<?> getEbookCounterStatsByYearByPlatform(int year) {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getEbookStatsForYearByPlatform, new Object[]{year}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/ebookcounter/statsForYearBypublisher")
+    public ResponseEntity<?> getEbookCounterStatsForYearByPublisher(int year) {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getEbookStatsForYearByPublisher, new Object[]{year}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/journalcounter/statsByYearsByplatform")
+    public ResponseEntity<?> getJournalCounterStatsByYearsByPlatform() {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getJournalStatsByYearsByPlatform, new Object[]{}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/journalcounter/statsByYearsBypublisher")
+    public ResponseEntity<?> getJournalCounterStatsByYearsByPublisher() {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getJournalStatsByYearsByPublisher, new Object[]{}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/journalcounter/statsForYearByplatform")
+    public ResponseEntity<?> getJournalCounterStatsForYearByPlatform(int year) {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getJournalStatsForYearByPlatform, new Object[]{year}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
+        return ResponseEntity.ok(counterStatss);
+    }
+
+    @GetMapping("/journalcounter/statsForYearBypublisher")
+    public ResponseEntity<?> getJournalCounterStatsForYearByPublisher(int year) {
+        List<CounterStats> counterStatss = new ArrayList<>(jdbcTemplate.query(getJournalStatsForYearByPublisher, new Object[]{year}, (rs, rowNum) -> new CounterStats(rs.getString("identifier"), 0, rs.getInt("year"), rs.getLong("requests"), rs.getLong("items"))));
         return ResponseEntity.ok(counterStatss);
     }
 }
