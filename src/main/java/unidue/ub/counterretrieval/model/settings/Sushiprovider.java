@@ -1,9 +1,7 @@
 package unidue.ub.counterretrieval.model.settings;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import java.util.*;
 
 /**
  * Plain Old Java Object as representation of a SUSHI provider with all the necessary data to retrieve the reports.
@@ -179,7 +177,11 @@ public class Sushiprovider extends Profile {
     }
 
 	public String[] getReportTypes() {
-		return reportTypes.split(" ");
+
+		if (reportTypes != null)
+			return reportTypes.split(" ");
+		else
+			return new String[]{""};
 	}
 
 	public void setReportTypes(String[] reportTypes) {

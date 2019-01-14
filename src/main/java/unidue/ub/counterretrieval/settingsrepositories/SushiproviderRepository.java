@@ -11,6 +11,7 @@ import java.util.List;
 @RepositoryRestResource(collectionResourceRel = "sushiprovider", path = "sushiprovider")
 public interface SushiproviderRepository extends PagingAndSortingRepository<Sushiprovider, String> {
 
-    @Query(value = "SELECT identifier FROM sushi", nativeQuery = true)
+    @Query(value = "SELECT identifier FROM profile where dtype='Sushiprovider' and status='running'", nativeQuery = true)
+
     List<String> getActiveIdentifiers();
 }
