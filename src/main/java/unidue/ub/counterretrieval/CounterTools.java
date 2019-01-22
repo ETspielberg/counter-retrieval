@@ -52,7 +52,7 @@ public class CounterTools {
         Document sushiDoc = builder.build(new StringReader(sushiString));
         Element sushiElement = sushiDoc.detachRootElement().clone();
         try {
-            Element report = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Report", namespaceSushiCounter).getChild("Report", namespaceCounter);
+            Element report = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Report", namespaceSushiCounter).getChild("Report", namespaceSushiCounter);
             String type;
             if (report.getAttributeValue("Name") != null)
                 type = report.getAttributeValue("Name");
