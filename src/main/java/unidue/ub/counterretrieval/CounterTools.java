@@ -22,8 +22,8 @@ import java.util.List;
 
 /**
  * Helpful tools for handling of COUNTER reports
- * @author Eike Spielberg
  *
+ * @author Eike Spielberg
  */
 public class CounterTools {
 
@@ -37,12 +37,13 @@ public class CounterTools {
 
     /**
      * returns a list of <code>Counter</code> objects generated from the response of a SUSHI request.
+     *
      * @param sushi the SUSHI response
      * @return counters the list of COUNTER reports
-     * @exception SOAPException thrown upon errors occurring parsing the SUSHI response
-     * @exception IOException thrown upon errors occurring writing of the SUSHI response to the SAX-Buuilder
-     * @exception JDOMException thrown upon errors parsing the xml structure of the SUSHI response
-     * @exception CounterConversionException thrown if the CounterTools
+     * @throws SOAPException              thrown upon errors occurring parsing the SUSHI response
+     * @throws IOException                thrown upon errors occurring writing of the SUSHI response to the SAX-Buuilder
+     * @throws JDOMException              thrown upon errors parsing the xml structure of the SUSHI response
+     * @throws CounterConversionException thrown if the CounterTools
      */
     public static List<? extends Counter> convertSOAPMessageToCounters(SOAPMessage sushi) throws SOAPException, IOException, JDOMException, CounterConversionException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -52,7 +53,7 @@ public class CounterTools {
         Document sushiDoc = builder.build(new StringReader(sushiString));
         Element sushiElement = sushiDoc.detachRootElement().clone();
         try {
-            Element report = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Report", namespaceSushiCounter).getChild("Report", namespaceSushiCounter);
+            Element report = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Report", namespaceSushiCounter).getChild("Report", namespaceCounter);
             String type;
             if (report.getAttributeValue("Name") != null)
                 type = report.getAttributeValue("Name");
@@ -71,7 +72,7 @@ public class CounterTools {
             }
         } catch (Exception e) {
             try {
-                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushiCounter).getChildText("Message", namespaceCounter);
+                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushiCounter).getChildText("Message", namespaceSushiCounter);
                 throw new CounterConversionException("could not convert SOAP response: " + error);
             } catch (Exception ex) {
                 throw new CounterConversionException("could not convert SOAP response: " + sushiString);
@@ -99,7 +100,7 @@ public class CounterTools {
                 List<Element> instances = itemPerformance.getChildren("Instance", namespaceCounter);
                 int year = Integer.parseInt(startDate.substring(0, 4));
                 int month = Integer.parseInt(startDate.substring(5, 7));
-                DatabaseCounter counter = new DatabaseCounter(sushiprovider,platform,month,year);
+                DatabaseCounter counter = new DatabaseCounter(sushiprovider, platform, month, year);
                 counter.setTitle(title);
 
                 for (Element instance : instances) {
@@ -156,26 +157,27 @@ public class CounterTools {
                 String identifierType = identifier.getChild("Type", namespaceCounter).getValue();
                 String value = identifier.getChild("Value", namespaceCounter).getValue();
                 switch (identifierType) {
-                    case "Online_ISBN" : {
+                    case "Online_ISBN": {
                         onlineIsbn = value;
                         break;
                     }
-                    case "Print_ISBN" : {
+                    case "Print_ISBN": {
                         printIsbn = value;
                         break;
                     }
-                    case "ISNI" : {
+                    case "ISNI": {
                         isni = value;
                         break;
                     }
-                    case "DOI" : {
+                    case "DOI": {
                         doi = value;
                         break;
                     }
-                    case "Proprietary" : {
+                    case "Proprietary": {
                         proprietary = value;
                         break;
-                    }default: {
+                    }
+                    default: {
                         log.info(identifierType + " is not a categorized identifier type.");
                     }
                 }
@@ -186,7 +188,7 @@ public class CounterTools {
                 List<Element> instances = itemPerformance.getChildren("Instance", namespaceCounter);
                 int year = Integer.parseInt(startDate.substring(0, 4));
                 int month = Integer.parseInt(startDate.substring(5, 7));
-                EbookCounter counter = new EbookCounter(onlineIsbn,platform,month,year);
+                EbookCounter counter = new EbookCounter(onlineIsbn, platform, month, year);
                 counter.setDoi(doi).setProprietary(proprietary).setIsni(isni).setPrintIsbn(printIsbn).setPublisher(sushiprovider).setTitle(title);
                 for (Element instance : instances) {
                     long value = Long.parseLong(instance.getChild("Count", namespaceCounter).getValue().trim());
@@ -232,7 +234,7 @@ public class CounterTools {
                 long totalRequests = counter.getHtmlRequests() + counter.getHtmlRequestsMobile() + counter.getPdfRequests() + counter.getPdfRequestsMobile() + counter.getPsRequests() + counter.getPsRequestsMobile() + counter.getEpubRequest();
                 if (counter.getTotalRequests() != totalRequests) {
                     log.warn("sum of individual requests (" + totalRequests + ") does not match total requests (" + counter.getTotalRequests() + ")!");
-                    counter.setTotalRequests(Math.max(totalRequests,counter.getTotalRequests()));
+                    counter.setTotalRequests(Math.max(totalRequests, counter.getTotalRequests()));
                 }
                 counters.add(counter);
             }
@@ -264,19 +266,19 @@ public class CounterTools {
                 String identifierType = identifier.getChild("Type", namespaceCounter).getValue();
                 String value = identifier.getChild("Value", namespaceCounter).getValue();
                 switch (identifierType) {
-                    case "Online_ISSN" :  {
+                    case "Online_ISSN": {
                         onlineISSN = value;
                         break;
                     }
-                    case "Print_ISSN" : {
+                    case "Print_ISSN": {
                         printISSN = value;
                         break;
                     }
-                    case "Proprietary" : {
+                    case "Proprietary": {
                         proprietary = value;
                         break;
                     }
-                    case "DOI" : {
+                    case "DOI": {
                         doi = value;
                         break;
                     }
@@ -296,13 +298,13 @@ public class CounterTools {
                 if (onlineISSN.isEmpty()) {
                     if (printISSN.isEmpty()) {
                         if (doi.isEmpty())
-                            counter = new JournalCounter(proprietary,"proprietary",platform,month,year);
+                            counter = new JournalCounter(proprietary, "proprietary", platform, month, year);
                         else
-                            counter = new JournalCounter(doi,"doi",platform,month,year);
+                            counter = new JournalCounter(doi, "doi", platform, month, year);
                     } else
-                        counter = new JournalCounter(printISSN,"printIssn",platform,month,year);
+                        counter = new JournalCounter(printISSN, "printIssn", platform, month, year);
                 } else
-                    counter = new JournalCounter(onlineISSN,"onlineIssn",platform,month,year);
+                    counter = new JournalCounter(onlineISSN, "onlineIssn", platform, month, year);
                 counter.caluclateId();
                 counter.setFullName(fullname).setType(type).setPrintIssn(printISSN).setAbbreviation(proprietary).setPublisher(sushiprovider).setDoi(doi);
 
@@ -348,7 +350,7 @@ public class CounterTools {
                 long totalRequests = counter.getHtmlRequests() + counter.getHtmlRequestsMobile() + counter.getPdfRequests() + counter.getPdfRequestsMobile() + counter.getPsRequests() + counter.getPsRequestsMobile();
                 if (counter.getTotalRequests() != totalRequests) {
                     log.warn("sum of individual requests (" + totalRequests + ") does not match total requests (" + counter.getTotalRequests() + ")!");
-                    counter.setTotalRequests(Math.max(totalRequests,counter.getTotalRequests()));
+                    counter.setTotalRequests(Math.max(totalRequests, counter.getTotalRequests()));
                 }
             }
         }
