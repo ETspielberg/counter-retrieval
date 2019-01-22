@@ -171,6 +171,7 @@ public class SushiCounterReader implements ItemReader<Counter> {
         } catch (Exception e) {
             counterLog.setStatus("ERROR");
             counterLog.setError(e.getLocalizedMessage());
+            e.printStackTrace();
         }
         counterLogRepository.save(counterLog);
         return countersFound;
