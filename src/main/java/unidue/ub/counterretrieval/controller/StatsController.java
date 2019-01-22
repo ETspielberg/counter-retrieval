@@ -29,7 +29,7 @@ public class StatsController {
 
     final private String selectPublisher = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
-    final private String selectPlatform = "SELECT publisher as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items";
+    final private String selectPlatform = "SELECT platform as identifier, month, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
     final private String selectPublisherYearly = "SELECT publisher as identifier, year, sum(total_requests) as requests, COUNT(total_requests) as items";
 
