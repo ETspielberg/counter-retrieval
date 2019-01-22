@@ -33,6 +33,8 @@ public class CounterTools {
 
     private static final Namespace namespaceSOAP = Namespace.getNamespace("http://schemas.xmlsoap.org/soap/envelope/");
 
+    private static final Namespace namespaceSushi = Namespace.getNamespace("http://www.niso.org/schemas/sushi");
+
     public final static Logger log = LoggerFactory.getLogger(CounterTools.class);
 
     /**
@@ -72,7 +74,7 @@ public class CounterTools {
             }
         } catch (Exception e) {
             try {
-                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushiCounter).getChildText("Message", namespaceSushiCounter);
+                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushi).getChildText("Message", namespaceSushi);
                 throw new CounterConversionException("could not convert SOAP response: " + error);
             } catch (Exception ex) {
                 throw new CounterConversionException("could not convert SOAP response: " + sushiString);
