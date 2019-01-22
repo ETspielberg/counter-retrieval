@@ -70,7 +70,12 @@ public class CounterTools {
                     return convertCounterElementsToDatabaseCounters(reportItems);
             }
         } catch (Exception e) {
-            throw new CounterConversionException("could not convert SOAP response: " + sushiString);
+            try {
+                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushiCounter).getChildText("Message", namespaceCounter);
+                throw new CounterConversionException("could not convert SOAP response: " + error);
+            } catch (Exception ex) {
+                throw new CounterConversionException("could not convert SOAP response: " + sushiString);
+            }
         }
         return null;
     }
