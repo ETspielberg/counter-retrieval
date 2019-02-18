@@ -74,7 +74,7 @@ public class CounterTools {
             }
         } catch (Exception e) {
             try {
-                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushi).getChildText("Message", namespaceSushi);
+                String error = sushiElement.getChild("Body", namespaceSOAP).getChild("ReportResponse", namespaceSushiCounter).getChild("Exception", namespaceSushi).getChildText("Message");
                 throw new CounterConversionException("could not convert SOAP response: " + error);
             } catch (Exception ex) {
                 throw new CounterConversionException("could not convert SOAP response: " + sushiString);

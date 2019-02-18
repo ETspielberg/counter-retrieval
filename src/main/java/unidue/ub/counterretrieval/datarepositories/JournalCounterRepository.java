@@ -23,4 +23,12 @@ public interface JournalCounterRepository extends PagingAndSortingRepository<Jou
     List<JournalCounter> findAllByPublisher(@Param("publisher") String publisher);
 
     List<JournalCounter> findAllByPlatform(@Param("platform") String platform);
+
+    List<JournalCounter> findAllByOnlineIssnAndYear(@Param("onlineIssn") String onlineIssn, @Param("year") int year);
+
+    List<JournalCounter> findAllByPrintIssnAndYear(@Param("printIssn") String printIssn, @Param("year") int year);
+
+    List<JournalCounter> findAllByDoiAndYear(@Param("doi") String doi, @Param("year") int year);
+
+    List<JournalCounter> findAllByProprietaryAndYear(@Param("proprietary") String proprietary, @Param("year") int year);
 }

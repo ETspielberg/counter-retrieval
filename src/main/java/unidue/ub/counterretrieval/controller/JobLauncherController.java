@@ -87,7 +87,7 @@ public class JobLauncherController {
                 .addLong("time", System.currentTimeMillis()).toJobParameters();
         JobParameters jobParameters = jobParametersBuilder.toJobParameters();
         jobLauncher.run(counterbuilderJob, jobParameters);
-        return ResponseEntity.ok("successfuly run");
+        return ResponseEntity.accepted().build();
     }
 
     @GetMapping("/counterlog/forSushiprovider")

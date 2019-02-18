@@ -5,6 +5,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import unidue.ub.counterretrieval.datarepositories.DatabaseCounterRepository;
 import unidue.ub.counterretrieval.datarepositories.EbookCounterRepository;
 import unidue.ub.counterretrieval.datarepositories.JournalCounterRepository;
@@ -79,6 +81,18 @@ public class CounterController {
         }
 
         return ResponseEntity.ok(counterCollections);
+    }
+
+    @GetMapping("/journalcounter/getForYear/{issn}")
+    public ResponseEntity<?> getAlJournalCountersForIssn(@PathVariable("issn") String issn, @RequestParam("year") int year) {
+        List<JournalCounter> list = journalCounterRepository.findAllByOnlineIssnAndYear(issn, year);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByPrintIssnAndYear(issn, year);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByDoiAndYear(issn, year);
+        if (list.size() == 0)
+            list = journalCounterRepository.findAllByProprietaryAndYear(issn, year);
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping("/journalcounter/getForPublisher")
