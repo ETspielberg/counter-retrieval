@@ -85,6 +85,7 @@ public class CounterController {
 
     @GetMapping("/journalcounter/getForYear/{issn}")
     public ResponseEntity<?> getAlJournalCountersForIssn(@PathVariable("issn") String issn, @RequestParam("year") int year) {
+        JournalCounterCollection counterCollection = new JournalCounterCollection(issn);
         List<JournalCounter> list = journalCounterRepository.findAllByOnlineIssnAndYear(issn, year);
         if (list.size() == 0)
             list = journalCounterRepository.findAllByPrintIssnAndYear(issn, year);
@@ -92,7 +93,9 @@ public class CounterController {
             list = journalCounterRepository.findAllByDoiAndYear(issn, year);
         if (list.size() == 0)
             list = journalCounterRepository.findAllByProprietaryAndYear(issn, year);
-        return ResponseEntity.ok(list);
+        counterCollection.setJournalCounters(list);
+        counterCollection.calculateTotalRequests();
+        return ResponseEntity.ok(counterCollection);
     }
 
     @GetMapping("/journalcounter/getForPublisher")
