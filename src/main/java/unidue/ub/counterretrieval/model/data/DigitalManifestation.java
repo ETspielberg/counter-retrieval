@@ -2,15 +2,15 @@ package unidue.ub.counterretrieval.model.data;
 
 import java.util.List;
 
-public class EbookCounterCollection {
+public class DigitalManifestation {
 
     private String identifier;
 
-    private List<EbookCounter> ebookCounters;
+    private List<EbookCounter> usage;
 
     private Long totalRequests;
 
-    public EbookCounterCollection(String identifier) {
+    public DigitalManifestation(String identifier) {
         this.identifier = identifier;
         this.totalRequests = 0L;
     }
@@ -23,12 +23,12 @@ public class EbookCounterCollection {
         this.identifier = identifier;
     }
 
-    public List<EbookCounter> getEbookCounters() {
-        return ebookCounters;
+    public List<EbookCounter> getUsage() {
+        return usage;
     }
 
-    public void setEbookCounters(List<EbookCounter> ebookCounters) {
-        this.ebookCounters = ebookCounters;
+    public void setUsage(List<EbookCounter> usage) {
+        this.usage = usage;
     }
 
     public Long getTotalRequests() {
@@ -40,8 +40,8 @@ public class EbookCounterCollection {
     }
 
     public void calculateTotalRequests() {
-        if (ebookCounters.size() > 0)
-            for (EbookCounter ebookCounter : ebookCounters)
+        if (usage.size() > 0)
+            for (EbookCounter ebookCounter : usage)
                 this.totalRequests += ebookCounter.getTotalRequests();
     }
 }

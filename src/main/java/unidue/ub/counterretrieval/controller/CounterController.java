@@ -11,7 +11,7 @@ import unidue.ub.counterretrieval.datarepositories.DatabaseCounterRepository;
 import unidue.ub.counterretrieval.datarepositories.EbookCounterRepository;
 import unidue.ub.counterretrieval.datarepositories.JournalCounterRepository;
 import unidue.ub.counterretrieval.model.data.EbookCounter;
-import unidue.ub.counterretrieval.model.data.EbookCounterCollection;
+import unidue.ub.counterretrieval.model.data.DigitalManifestation;
 import unidue.ub.counterretrieval.model.data.JournalCounter;
 import unidue.ub.counterretrieval.model.data.JournalCounterCollection;
 
@@ -67,7 +67,7 @@ public class CounterController {
             isbns = new String[]{isbn};
         List counterCollections = new ArrayList();
         for (String isbnInd : isbns) {
-            EbookCounterCollection ebookCounterCollection = new EbookCounterCollection(isbnInd);
+            DigitalManifestation digitalManifestation = new DigitalManifestation(isbnInd);
             List<EbookCounter> list = ebookCounterRepository.findAllByOnlineIsbn(isbnInd);
             if (list.size() == 0)
                 list = ebookCounterRepository.findAllByPrintIsbn(isbnInd);
@@ -75,9 +75,9 @@ public class CounterController {
                 list = ebookCounterRepository.findAllByDoi(isbnInd);
             if (list.size() == 0)
                 list = ebookCounterRepository.findAllByProprietary(isbnInd);
-            ebookCounterCollection.setEbookCounters(list);
-            ebookCounterCollection.calculateTotalRequests();
-            counterCollections.add(ebookCounterCollection);
+            digitalManifestation.setUsage(list);
+            digitalManifestation.calculateTotalRequests();
+            counterCollections.add(digitalManifestation);
         }
 
         return ResponseEntity.ok(counterCollections);
@@ -86,13 +86,13 @@ public class CounterController {
     @GetMapping("/journalcounter/getForYear/{issn}")
     public ResponseEntity<?> getAlJournalCountersForIssn(@PathVariable("issn") String issn, @RequestParam("year") int year) {
         JournalCounterCollection counterCollection = new JournalCounterCollection(issn);
-        List<JournalCounter> list = journalCounterRepository.findAllByOnlineIssnAndYear(issn, year);
+        List<JournalCounter> list = journalCounterRepository.findAllByOnlineIssnAndYearOrderByMonth(issn, year);
         if (list.size() == 0)
-            list = journalCounterRepository.findAllByPrintIssnAndYear(issn, year);
+            list = journalCounterRepository.findAllByPrintIssnAndYearOrderByMonth(issn, year);
         if (list.size() == 0)
-            list = journalCounterRepository.findAllByDoiAndYear(issn, year);
+            list = journalCounterRepository.findAllByDoiAndYearOrderByMonth(issn, year);
         if (list.size() == 0)
-            list = journalCounterRepository.findAllByProprietaryAndYear(issn, year);
+            list = journalCounterRepository.findAllByProprietaryAndYearOrderByMonth(issn, year);
         counterCollection.setJournalCounters(list);
         counterCollection.calculateTotalRequests();
         return ResponseEntity.ok(counterCollection);
