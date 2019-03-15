@@ -2,15 +2,15 @@ package unidue.ub.counterretrieval.model.data;
 
 import java.util.List;
 
-public class JournalCounterCollection {
+public class CounterCollection {
 
     private String identifier;
 
     private Long totalRequests;
 
-    private List<JournalCounter> journalCounters;
+    private List<? extends Counter> counters;
 
-    public JournalCounterCollection(String identifer) {
+    public CounterCollection(String identifer) {
         this.identifier = identifer;
         this.totalRequests = 0L;
     }
@@ -31,17 +31,17 @@ public class JournalCounterCollection {
         this.totalRequests = totalRequests;
     }
 
-    public List<JournalCounter> getJournalCounters() {
-        return journalCounters;
+    public List<? extends Counter> getCounters() {
+        return counters;
     }
 
-    public void setJournalCounters(List<JournalCounter> journalCounters) {
-        this.journalCounters = journalCounters;
+    public void setCounters(List<? extends Counter> counters) {
+        this.counters = counters;
     }
 
     public void calculateTotalRequests() {
-        if (journalCounters.size() > 0)
-            for (JournalCounter journalCounter : journalCounters)
-                this.totalRequests += journalCounter.getTotalRequests();
+        if (counters.size() > 0)
+            for (Counter counter : counters)
+                this.totalRequests += counter.totalRequests;
     }
 }

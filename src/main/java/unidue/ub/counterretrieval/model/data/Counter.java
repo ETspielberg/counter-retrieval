@@ -8,6 +8,8 @@ public abstract class Counter implements Comparable<Counter>{
 
     private String profile;
 
+    public long totalRequests;
+
     /**
      * compares one COUNTER report to the other. Allows for time-dependent ordering of COUNTER reports.
      * @param other the other COUNTER report, the actual one is compared to

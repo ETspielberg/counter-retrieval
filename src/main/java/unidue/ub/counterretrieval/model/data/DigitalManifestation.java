@@ -1,5 +1,6 @@
 package unidue.ub.counterretrieval.model.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DigitalManifestation {
@@ -10,9 +11,13 @@ public class DigitalManifestation {
 
     private Long totalRequests;
 
+    private String title;
+
     public DigitalManifestation(String identifier) {
         this.identifier = identifier;
         this.totalRequests = 0L;
+        this.title = "";
+        this.usage = new ArrayList<>();
     }
 
     public String getIdentifier() {
@@ -37,6 +42,14 @@ public class DigitalManifestation {
 
     public void setTotalRequests(Long totalRequests) {
         this.totalRequests = totalRequests;
+    }
+
+    public String getTitle() {
+        try {
+            return this.usage.get(0).getTitle();
+        } catch (Exception e) {
+            return "";
+        }
     }
 
     public void calculateTotalRequests() {
